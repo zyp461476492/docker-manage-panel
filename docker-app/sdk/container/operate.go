@@ -47,6 +47,27 @@ func Create(assetId int, containerName, imageName string) myType.RetMsg {
 	return myType.RetMsg{Res: true, Obj: body}
 }
 
+func Remove(assetId int, containerId string) myType.RetMsg {
+	asset, err := service.GetAsset(assetId)
+	if err != nil {
+		return myType.RetMsg{Res: false, Info: err.Error(), Obj: nil}
+	}
+
+	cli, err := myClient.GetClient(asset)
+	if err != nil {
+		log.Printf("连接失败 %s", err.Error())
+		return myType.RetMsg{Res: false, Info: err.Error(), Obj: nil}
+	}
+
+	err = cli.ContainerRemove(context.Background(), containerId, types.ContainerRemoveOptions{})
+	if err != nil {
+		log.Printf("容器删除失败 %s", err.Error())
+		return myType.RetMsg{Res: false, Info: err.Error(), Obj: nil}
+	}
+
+	return myType.RetMsg{Res: true}
+}
+
 func Start(assetId int, containerId string) myType.RetMsg {
 	asset, err := service.GetAsset(assetId)
 	if err != nil {
