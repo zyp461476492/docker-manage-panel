@@ -1,0 +1,17 @@
+.tableContent {
+  margin-top: 10px;
+}
+
+.terminalPanel {
+  margin-top: 10px;
+  padding: 5px;
+  width: 100%;
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.scrollSon{
+    overflow-x: hidden;
+}
+
