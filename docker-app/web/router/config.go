@@ -10,6 +10,7 @@ func ConfigRouter() {
 	http.HandleFunc("/image/del", imageDel)
 	http.HandleFunc("/container/list", containerList)
 	http.HandleFunc("/container/logs", containerLogs)
+	http.HandleFunc("/container/create", containerCreate)
 	http.HandleFunc("/container/stats", containerStats)
 	http.HandleFunc("/container/start", containerStart)
 	http.HandleFunc("/container/pause", containerPause)
