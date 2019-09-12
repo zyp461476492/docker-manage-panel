@@ -24,6 +24,10 @@ export async function imageDel({ assetId, imageId }) {
   return request(`/api/image/del?assetId=${assetId}&imageId=${imageId}`);
 }
 
+export async function containerCreate({ assetId, containerName, imageName }) {
+  return request(`/api/container/create?assetId=${assetId}&containerName=${containerName}&imageName=${imageName}`);
+}
+
 export async function containerStart({ assetId, containerId }) {
   return request(`/api/container/start?assetId=${assetId}&containerId=${containerId}`);
 }
