@@ -45,7 +45,6 @@ class ContainerCreateModel extends React.Component {
           imageName: values.imageName,
         },
         callback: response => {
-          console.log(response);
           if (response.Res) {
             message.success(`容器[${response.Obj.Id}]成功`);
             this.props.close();

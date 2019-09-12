@@ -263,6 +263,9 @@ class ContainerPanel extends React.Component {
                 <Button onClick={this.toggleCreateDialog} icon="plus">
                   新增
                 </Button>
+                <Button onClick={this.toggleCreateDialog} icon="plus">
+                  删除
+                </Button>
                 <Button onClick={this.openLogDialog} icon="snippets">
                   日志
                 </Button>
