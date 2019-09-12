@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { message, Table, Button, Card } from 'antd';
 import ContainerLogsDialog from '../dialog/containerLogsDialog';
 import ContainerStatsDialog from '../dialog/containerStatsDialog';
+import ContainerCreateDialog from '../dialog/containerCreateDialog';
 
 const ButtonGroup = Button.Group;
 
@@ -55,6 +56,7 @@ class ContainerPanel extends React.Component {
     selectedRow: [],
     logVisible: false,
     statsVisible: false,
+    createVisible: false,
   };
 
   componentDidMount = () => {
@@ -119,6 +121,11 @@ class ContainerPanel extends React.Component {
     return data;
   };
 
+  refreshInfo = () => {
+    this.queryContainerList();
+    this.queryBasicInfo();
+  };
+
   queryContainerList = () => {
     const id = this.props.assetId;
     this.props.dispatch({
@@ -162,9 +169,7 @@ class ContainerPanel extends React.Component {
         } else {
           message.error(`${tip}失败`, 1);
         }
-        this.queryContainerList();
-        // 同步刷新基本信息
-        this.queryBasicInfo();
+        this.refreshInfo();
       },
     });
   };
@@ -213,6 +218,12 @@ class ContainerPanel extends React.Component {
     });
   };
 
+  toggleCreateDialog = () => {
+    this.setState({
+      createVisible: !this.state.createVisible,
+    });
+  };
+
   render() {
     const { selectedRowKeys } = this.state;
     const rowSelection = {
@@ -227,6 +238,12 @@ class ContainerPanel extends React.Component {
 
     return (
       <div>
+        <ContainerCreateDialog
+          assetId={this.props.assetId}
+          visible={this.state.createVisible}
+          close={this.toggleCreateDialog}
+          refreshInfo={this.refreshInfo}
+        />
         <ContainerLogsDialog
           assetId={this.props.assetId}
           containerId={this.state.selectedRowKeys[0]}
@@ -243,7 +260,7 @@ class ContainerPanel extends React.Component {
           extra={
             <div>
               <ButtonGroup>
-                <Button onClick={this.openLogDialog} icon="plus">
+                <Button onClick={this.toggleCreateDialog} icon="plus">
                   新增
                 </Button>
                 <Button onClick={this.openLogDialog} icon="snippets">

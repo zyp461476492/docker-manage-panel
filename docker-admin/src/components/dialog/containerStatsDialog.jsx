@@ -43,7 +43,7 @@ class StatsPanel extends React.Component {
     this.containerLogsBegin();
   }
 
-  componentWillUnmount() {
+  componentDidMount() {
     if (websocketClient) {
       websocketClient.close();
       websocketClient = null;
@@ -129,7 +129,7 @@ class ContainerStatsModel extends React.Component {
   render() {
     return (
       <Modal
-        title="容器日志"
+        title="实时状态"
         footer={null}
         visible={this.props.visible}
         onCancel={this.props.close}
