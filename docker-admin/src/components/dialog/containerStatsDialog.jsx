@@ -22,8 +22,8 @@ const sizeConvert = size => {
 
 const dataParser = info => {
   
-  const cpu = (info.cpu_stats.cpu_usage.total_usage / info.cpu_stats.system_cpu_usage).toFixed(2);
-  const memory = (info.memory_stats.usage / info.memory_stats.limit).toFixed(2);
+  const cpu = (info.cpu_stats.cpu_usage.total_usage / info.cpu_stats.system_cpu_usage * 100).toFixed(2);
+  const memory = (info.memory_stats.usage / info.memory_stats.limit * 100 ).toFixed(2) ;
   const memoryUsage = (info.memory_stats.usage / (1024 * 1024)).toFixed(2) + 'MB';
   const memoryLimit = (info.memory_stats.limit / (1024 * 1024)).toFixed(2) + 'MB';
   // const netIO = sizeConvert(info.networks.eth0);
