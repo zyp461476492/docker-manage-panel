@@ -124,6 +124,18 @@ export default {
         callback(res);
       }
     },
+    *containerRemove(
+      {
+        payload: { assetId, containerId},
+        callback,
+      },
+      { call },
+    ) {
+      const res = yield call(basicService.containerRemove, { assetId, containerId});
+      if (callback && typeof callback === 'function') {
+        callback(res);
+      }
+    },
     *containerStart(
       {
         payload: { assetId, containerId },
