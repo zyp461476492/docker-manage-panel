@@ -133,7 +133,7 @@ export default {
     ) {
       const res = yield call(basicService.containerRemove, { assetId, containerId});
       if (callback && typeof callback === 'function') {
-        callback(res);
+        callback(res.Res);
       }
     },
     *containerStart(

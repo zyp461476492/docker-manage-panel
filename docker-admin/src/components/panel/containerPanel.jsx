@@ -124,6 +124,10 @@ class ContainerPanel extends React.Component {
   refreshInfo = () => {
     this.queryContainerList();
     this.queryBasicInfo();
+    this.setState({
+      selectedRowKeys: [],
+      selectedRow: [],
+    });
   };
 
   queryContainerList = () => {
@@ -154,6 +158,9 @@ class ContainerPanel extends React.Component {
     } else if (type === 'unpause') {
       dispatchType = 'dockerBasic/containerUnpause';
       tip = '恢复';
+    } else if (type === 'remove') {
+      dispatchType = 'dockerBasic/containerRemove';
+      tip = '删除';
     }
 
     this.props.dispatch({
@@ -263,7 +270,7 @@ class ContainerPanel extends React.Component {
                 <Button onClick={this.toggleCreateDialog} icon="plus">
                   新增
                 </Button>
-                <Button onClick={this.toggleCreateDialog} icon="plus">
+                <Button onClick={this.execCommand.bind(this, 'remove')} icon="delete">
                   删除
                 </Button>
                 <Button onClick={this.openLogDialog} icon="snippets">

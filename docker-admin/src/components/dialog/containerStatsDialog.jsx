@@ -43,7 +43,7 @@ class StatsPanel extends React.Component {
     this.containerLogsBegin();
   }
 
-  componentDidMount() {
+  componentWillUnmount() {
     if (websocketClient) {
       websocketClient.close();
       websocketClient = null;
