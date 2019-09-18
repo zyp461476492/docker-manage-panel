@@ -1,11 +1,20 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input, message } from 'antd';
+import { Modal, Form, Input, Select, message } from 'antd';
 import styles from './dialog.css';
 
+const InputGroup = Input.Group;
+const { Option } = Select;
 class ContainerFormPanel extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
+    const prefixSelector = getFieldDecorator('prefix', {
+      initialValue: 'tcp',
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="tcp">tcp</Option>
+      </Select>,
+    );
     return (
       <Form layout="vertical">
         <Form.Item label="容器名称">
@@ -17,6 +26,20 @@ class ContainerFormPanel extends React.Component {
           {getFieldDecorator('imageName', {
             rules: [{ required: true, message: '请输入镜像名称' }],
           })(<Input />)}
+        </Form.Item>
+        <Form.Item label="IP绑定设置">
+          <InputGroup compact>
+            {getFieldDecorator('port', {
+              rules: [{ required: true, message: '请输入IP设置' }],
+            })(
+              <Select >
+                <Option value="tcp">TCP</Option>
+              </Select>
+            )}
+            {getFieldDecorator('ip', {
+              rules: [{ required: true, message: '请输入IP设置' }],
+            })(<Input style={{ width: '80%' }}  />)}
+          </InputGroup>
         </Form.Item>
       </Form>
     );
