@@ -1,20 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input, Select, message } from 'antd';
+import { Row, Col, Alert, Modal, Form, Input, Select, message } from 'antd';
 import styles from './dialog.css';
+import ContainerNetworkInput from '../containerNetworkInput/containerNetworkInput';
 
 const InputGroup = Input.Group;
 const { Option } = Select;
 class ContainerFormPanel extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: 'tcp',
-    })(
-      <Select style={{ width: 70 }}>
-        <Option value="tcp">tcp</Option>
-      </Select>,
-    );
     return (
       <Form layout="vertical">
         <Form.Item label="容器名称">
@@ -27,20 +21,17 @@ class ContainerFormPanel extends React.Component {
             rules: [{ required: true, message: '请输入镜像名称' }],
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="IP绑定设置">
-          <InputGroup compact>
-            {getFieldDecorator('port', {
-              rules: [{ required: true, message: '请输入IP设置' }],
-            })(
-              <Select >
-                <Option value="tcp">TCP</Option>
-              </Select>
-            )}
+        <div>
+          <Form.Item label="端口绑定">
             {getFieldDecorator('ip', {
+              initialValue: { dockerPort: 0, hostPort: 0 },
               rules: [{ required: true, message: '请输入IP设置' }],
-            })(<Input style={{ width: '80%' }}  />)}
-          </InputGroup>
-        </Form.Item>
+            })(<ContainerNetworkInput style={{ width: '80%' }} />)}
+          </Form.Item>
+          <Form.Item label="端口填写说明">
+            <Alert message="[ docker容器端口 ]: [ 对外暴露端口 ]" type="info" />
+          </Form.Item>
+        </div>
       </Form>
     );
   }
