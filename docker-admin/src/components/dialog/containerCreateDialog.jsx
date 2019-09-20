@@ -1,14 +1,49 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Row, Col, Alert, Modal, Form, Input, Select, message } from 'antd';
-import styles from './dialog.css';
+import { Button, Icon, Alert, Modal, Form, Input, message } from 'antd';
 import ContainerNetworkInput from '../containerNetworkInput/containerNetworkInput';
 
-const InputGroup = Input.Group;
-const { Option } = Select;
+let id = 0;
+
 class ContainerFormPanel extends React.Component {
+  remove = k => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue('keys');
+    // We need at least one network config
+    if (keys.length < 1) {
+      return;
+    }
+
+    // can use data-binding to set
+    form.setFieldsValue({
+      keys: keys.filter(key => key !== k),
+    });
+  };
+
+  add = () => {
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue('keys');
+    const nextKeys = keys.concat(id++);
+    // can use data-binding to set
+    // important! notify form to detect changes
+    form.setFieldsValue({
+      keys: nextKeys,
+    });
+  };
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
+    getFieldDecorator('keys', { initialValue: [] });
+    const keys = getFieldValue('keys');
+    const formItems = keys.map((k, index) => (
+      <Form.Item label={index === 0 ? '端口映射' : ''} required={false} key={k}>
+        {getFieldDecorator(`portMap${k}`, {
+          initialValue: { type: 'tcp', dockerPort: 0, hostPort: 0 },
+          rules: [{ required: true, message: '请输入端口映射' }],
+        })(<ContainerNetworkInput remove={this.remove} k={k} removeShow={keys.length >= 1} />)}
+      </Form.Item>
+    ));
     return (
       <Form layout="vertical">
         <Form.Item label="容器名称">
@@ -21,17 +56,15 @@ class ContainerFormPanel extends React.Component {
             rules: [{ required: true, message: '请输入镜像名称' }],
           })(<Input />)}
         </Form.Item>
-        <div>
-          <Form.Item label="端口绑定">
-            {getFieldDecorator('ip', {
-              initialValue: { dockerPort: 0, hostPort: 0 },
-              rules: [{ required: true, message: '请输入IP设置' }],
-            })(<ContainerNetworkInput style={{ width: '80%' }} />)}
-          </Form.Item>
-          <Form.Item label="端口填写说明">
-            <Alert message="[ docker容器端口 ]: [ 对外暴露端口 ]" type="info" />
-          </Form.Item>
-        </div>
+        {formItems}
+        <Form.Item>
+          <Button type="dashed" onClick={this.add} style={{ width: '100%' }}>
+            <Icon type="plus" /> 新增端口映射关系
+          </Button>
+        </Form.Item>
+        <Form.Item label="端口填写说明">
+          <Alert message="[ docker容器端口 ]: [ 对外暴露端口 ]" type="info" />
+        </Form.Item>
       </Form>
     );
   }
@@ -51,6 +84,7 @@ class ContainerCreateModel extends React.Component {
       if (err) {
         return;
       }
+      console.log(values);
       this.props.dispatch({
         type: 'dockerBasic/containerCreate',
         payload: {

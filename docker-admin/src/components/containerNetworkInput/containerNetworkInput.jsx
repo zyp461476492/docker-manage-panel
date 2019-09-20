@@ -1,5 +1,6 @@
 import React from 'react';
-import { Input, InputNumber, Select } from 'antd';
+import { Icon, Input, InputNumber, Select } from 'antd';
+import styles from './input.css';
 
 const InputGroup = Input.Group;
 const { Option } = Select;
@@ -55,6 +56,18 @@ class ContainerNetworkInput extends React.Component {
 
   render() {
     const { type, dockerPort, hostPort } = this.state;
+    const removeShow = this.props.removeShow;
+    let removeIcon = <div></div>;
+    console.log(styles.dynamicDeleteButton);
+    if (removeShow) {
+      removeIcon = (
+        <Icon
+        className={styles.icon}
+          type="minus-circle-o"
+          onClick={() => this.props.remove(this.props.k)}
+        />
+      );
+    }
     return (
       <InputGroup compact>
         <Select value={type} disabled={true}>
@@ -67,6 +80,7 @@ class ContainerNetworkInput extends React.Component {
           onChange={this.handleDockerPortChange}
         />
         <InputNumber value={hostPort} max={65535} min={1} onChange={this.handleHostPortChange} />
+        <div className={styles.dynamicDeleteButton}>{removeIcon}</div>
       </InputGroup>
     );
   }
